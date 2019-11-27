@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT"  >
+ <aura:attribute name="question" type="Survey_Question__c"/>
+</aura:event>

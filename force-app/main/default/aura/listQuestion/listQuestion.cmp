@@ -1,0 +1,10 @@
+<aura:component >
+	  <aura:attribute name="questions" type="Survey_Question__c[]"/>
+    <lightning:card title="Questions">
+        <p class="slds-p-horizontal--small">
+            <aura:iteration items="{!v.questions}" var="question">
+                <c:questionItem question="{!question}"/>
+            </aura:iteration>
+        </p>
+    </lightning:card>
+</aura:component>

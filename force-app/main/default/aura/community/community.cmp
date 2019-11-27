@@ -1,0 +1,30 @@
+<aura:component controller="QuestionController" implements="force:hasRecordId,flexipage:availableForRecordHome,lightning:isUrlAddressable,forceCommunity:availableForAllPageTypes">
+   <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="Handler for valueInit event fired when the component has been initialised"/>
+       <aura:attribute name="surveyId" type="Id"></aura:attribute>
+    <aura:attribute name="questions" type="Survey_Question__c[]"  default="{ 'sobjectType': 'Survey_Question__c',
+                  	'Id':'',
+                  		'Type__c':'Radio',
+                         'Required__c': '',
+                       	 'Question__c': '',
+                  		 'Choices__c' :'',
+                  		'Active__c':''
+                  }"></aura:attribute>
+    <aura:attribute name="answers" type="Survey_Question_Response__c[]"  default="{ 'sobjectType': 'Survey_Question_Response__c',
+                  	'Response':''
+                  }"></aura:attribute>
+    
+    
+ 	 <lightning:card title="Questions">
+        <p class="slds-p-horizontal--small">
+          <form >
+            <aura:iteration items="{!v.questions}" var="question">
+              <!--  <c:questionComponent question="{!question}"/> -->
+            </aura:iteration>
+                <lightning:button label="Submit" 
+                              class="slds-m-top--medium"
+                              variant="brand"
+                              onclick="{!c.clickCreate}"/>
+            </form> 
+        </p>
+    </lightning:card>
+</aura:component>

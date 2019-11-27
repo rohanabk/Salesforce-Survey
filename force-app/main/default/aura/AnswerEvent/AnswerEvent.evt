@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT"  >
+ <aura:attribute name="questionId" type="Id"/>
+ <aura:attribute name="answer" type="String"/>
+ 
+</aura:event>

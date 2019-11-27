@@ -1,0 +1,57 @@
+<aura:component >
+    <aura:attribute name="question" type="Survey_Question__c"/>
+    <aura:attribute name="answer" type="Survey_Question_Response__c" default="{ 'sobjectType': 'Survey_Question_Response__c',
+                  
+                         'Response__c': '',
+                       	
+                  }"/>
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/> 
+    <aura:registerEvent name="answerUpdateEvent" type="c:AnswerEvent"/>  
+    
+     <aura:attribute name="RadioMap" type="Map" />
+    <form>
+    <article class="slds-card">
+  		<div class="slds-card__body slds-card__body_inner">
+ 			<p class="slds-p-horizontal_small">
+                
+               <aura:if isTrue = "{!v.question.Type__c == 'Radio' }">  
+        			
+      				 <lightning:radioGroup aura:id="questionform" 
+                                           name="{!'radio_'+v.question.Id }"
+                                           label="{!v.question.Question__c}"
+                                                  options="{! v.RadioMap }"
+                                                  value="{!v.answer.Response__c}"
+                                           		onchange="{!c.radioClick}"
+                                                  type="radio"
+                                           		required="{!v.question.Required__c}"
+                                                   />
+    			</aura:if>
+    
+   				<aura:if isTrue = "{!v.question.Type__c == 'Checkbox' }">
+         
+        			<lightning:checkboxGroup aura:id="questionform"
+                                             name="{!'Checkbox_'+v.question.Id }"
+                                       		 label="{!v.question.Question__c}"
+                                        	 options="{! v.RadioMap }"
+                                        	 value="{!v.answer.Response__c}"
+                                             onchange="{!c.CheckboxClick}"
+                                             required="{!v.question.Required__c}"
+                                        	 />
+    			</aura:if>
+    
+     			<aura:if isTrue = "{!v.question.Type__c == 'Descriptive' }">
+        
+       				 <lightning:textarea aura:id="questionform" 
+                			        	 label="{!v.question.Question__c}"
+                         			     name="{!'questionDescriptive_'+v.question.Id }"
+                      			         value="{!v.answer.Response__c}"
+                                         required="{!v.question.Required__c}"
+                                         onfocusout="{!c.radioClick}"/> 
+    			</aura:if>
+        	</p>
+        </div>
+
+	</article>
+	</form>
+</aura:component>

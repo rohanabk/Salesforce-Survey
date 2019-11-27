@@ -1,0 +1,33 @@
+<aura:component >
+	  <aura:attribute name="openModal" type="boolean" default="false"/>
+    <div class="slds-m-around--xx-large">
+        <button class="slds-button slds-button--brand" onclick="{!c.handleOpenModal}">Open Modal</button>  
+        <aura:if isTrue="{!v.openModal}">
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.handleCloseModal}">
+                            X
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 class="slds-text-heading--medium">Biswajeet Samal</h1>
+                    </div>
+                     
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center> <p><b>
+                            Welcome to Biswajeet Samal's Blog
+                            </b>
+                            </p></center>
+                    </div>
+                    <!--Modal Box Button-->
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button--brand" onclick="{!c.handleCloseModal}">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+        </aura:if>
+    </div>
+</aura:component>

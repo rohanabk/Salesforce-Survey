@@ -1,0 +1,51 @@
+<aura:component >
+	 <aura:handler name="init" action="{!c.doInit}" value="{!this}"/> 
+    <aura:attribute name="question" type="Survey_Question__c"/>
+    
+     <aura:attribute name="RadioMap" type="Map" />
+    <aura:registerEvent name="questionListUpdatedEvent" type="c:QuestionListUpdated"/>  
+    
+    <aura:registerEvent name="questionEditEvent" type="c:QuestionListEdit"/>
+    
+   
+   <lightning:card  title="{!v.question.Question__c + (v.question.Required__c == true ? ' (Required)':' ' )}">
+        <aura:set attribute="actions">
+            
+     <!-- Brand variant: Identifies the primary action in a group of buttons -->
+    <lightning:button variant="brand" label="Edit" title="Edit" onclick="{! c.handleEdit }" />
+    
+     <!-- Destructive variant: Identifies a potentially negative action -->
+    <lightning:button  label="Delete" title="Delete" onclick="{! c.clickDelete }"/>
+    
+ 
+        </aura:set>
+        <p class="slds-p-horizontal_small">
+               <aura:if isTrue = "{!v.question.Type__c == 'Radio' }">  
+        
+       <lightning:radioGroup aura:id="questionform" name="questionRequired"
+                                                  label=""
+                                                  options="{! v.RadioMap }"
+                                                  value=""
+                                                  type="radio"
+                                                   />
+    </aura:if>
+    
+     <aura:if isTrue = "{!v.question.Type__c == 'Checkbox' }">
+         
+        <lightning:checkboxGroup name="Checkbox Group"
+                             	label=""
+                            	options="{! v.RadioMap }"
+                                value=""
+                                />
+    </aura:if>
+    
+     <aura:if isTrue = "{!v.question.Type__c == 'Descriptive' }">
+        
+        <lightning:textarea aura:id="questionform" 
+                        label="Answer"
+                         name="questionChoices"
+                         value="{! v.question.Choices__c}"   /> 
+    </aura:if>
+        </p>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,191 @@
+<aura:component controller="QuestionController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	 <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+     <aura:attribute name="questions" type="Survey_Question__c[]"/>
+    
+    <aura:attribute name="newQuestion" type="Survey_Question__c"
+         default="{ 'sobjectType': 'Survey_Question__c',
+                  	'Id':'',
+                  		'Type__c':'Radio',
+                         'Required__c': '',
+                       	 'Question__c': '',
+                  		 'Choices__c' :'',
+                  		'Active__c':''
+                  }"/>   
+   <aura:handler name="questionListUpdatedEvent" event="c:QuestionListUpdated"
+        action="{!c.updateEvent } " value="{!this}"/> 
+    
+     <aura:handler name="questionEditEvent" event="c:QuestionListEdit"
+        action="{!c.EditEvent } " value="{!this}"/> 
+   
+	<aura:attribute name="openModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="openEditModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="questionTypes" type="String[]" default="Radio,Checkbox,Descriptive"/>
+
+    <aura:attribute name="hide" type="boolean" default="false"/>
+ 
+    <aura:attribute name="rOptions" type="List" default="[
+    {'label': 'Yes', 'value': 'true'},
+    {'label': 'No', 'value': 'false'}
+    ]"/>
+    
+    <aura:attribute name="aOptions" type="List" default="[
+    {'label': 'Yes', 'value': 'true'},
+    {'label': 'No', 'value': 'false'}
+    ]"/>
+    <aura:attribute name="requiredOption" type="String" default="option1"/>
+	
+     <aura:attribute name="activeOption" type="String" default="option1"/>
+    
+	 
+    
+    <lightning:card >           
+    <div class="slds-m-around--small">
+		<button class="slds-button slds-button--brand" onclick="{!c.handleOpenModal}">Add Question</button>       
+        <aura:if isTrue="{!v.openModal}">
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.handleCloseModal}">
+                            X
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 class="slds-text-heading--medium">New Question</h1>
+                    </div>
+                     
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__content slds-p-around--medium">
+                        
+                            <p>
+                                    <!-- CREATE NEW survey FORM -->
+                                <form class="slds-form--stacked">   
+                                   
+    							 	<lightning:select name="selectType" label="Select question type" 
+                                                      required="true" 
+                                                      aura:id="selectType"
+                                                      onchange="{!c.onChange}"
+                                                      >
+                                        <aura:iteration items="{!v.questionTypes}" var="type">
+                                       		 <option text="{!type}"  ></option>
+                                        </aura:iteration>
+                            		</lightning:select>  
+                                    
+                                  <lightning:textarea aura:id="questionform" 
+                                                     label="Question"
+                                                     name="questionText"
+                                                     value="{!v.newQuestion.Question__c}"
+                                                     required="true"/> 
+                                    
+                                                     <lightning:radioGroup aura:id="questionform" name="questionRequired"
+                                                  label="Required?"
+                                                  options="{! v.rOptions }"
+                                                  value="{! v.newQuestion.Required__c }"
+                                                  type="radio"
+                                                   required="true"/>
+                                                
+                                                 <lightning:radioGroup aura:id="questionform" name="questionActive"
+                                                  label="Active?"
+                                                  options="{! v.aOptions }"
+                                                  value="{! v.newQuestion.Active__c }"
+                                                  type="radio"
+                                                   required="true"/>
+                                    
+                                    <lightning:textarea aura:id="questionform" 
+                                                     label="Please enter the list of 
+                                                            answers/responses in the field below. 
+                                                            Each value should be separated by a new line."
+                                                     name="questionChoices"
+                                                     value="{!v.newQuestion.Choices__c}"
+                                                     required="{!v.hide}"
+                                                     disabled="{!v.hide}"/> 
+        
+                                    <button class="slds-button slds-button--brand" onclick="{!c.handleCloseModal}">Cancel</button>
+                     			   <button class="slds-button slds-button--brand" onclick="{!c.clickCreate}">Save</button>
+                                   
+                                </form>
+                            </p>
+                       
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+        </aura:if>
+    </div>
+       
+    </lightning:card>
+    
+   <aura:if isTrue="{!v.openEditModal}">
+            <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.handleCloseModal}">
+                            X
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 class="slds-text-heading--medium">New Question</h1>
+                    </div>
+                     
+                    <!--Modal Box Header-->
+                    <div class="slds-modal__content slds-p-around--medium">
+                        
+                            <p>
+                                    <!-- CREATE NEW survey FORM -->
+                                <form class="slds-form--stacked">   
+                                   
+    
+                                    
+                                  <lightning:textarea aura:id="editform" 
+                                                     label="Question"
+                                                     name="questionText"
+                                                     value="{!v.newQuestion.Question__c}"
+                                                     required="true"/> 
+                                    
+                                                     <lightning:radioGroup aura:id="questionRequired" name="questionRequired"
+                                                  label="Required?"
+                                                  options="{! v.rOptions }"
+                                                  value="{! (v.newQuestion.Required__c) == true?'true':'false' }"
+                                                  type="radio"
+                                                   
+                                                   required="true"/>
+                                                
+                                                 <lightning:radioGroup aura:id="questionActive" name="questionActive"
+                                                  label="Active?"
+                                                  options="{! v.aOptions }"
+                                                  value="{! (v.newQuestion.Active__c) == true?'true':'false' }"
+                                                       
+                                                  type="radio"
+                                                   required="true"/>
+                                    
+                                    <lightning:textarea aura:id="editform" 
+                                                     label="Please enter the list of 
+                                                            answers/responses in the field below. 
+                                                            Each value should be separated by a new line."
+                                                     name="questionChoices"
+                                                     value="{!v.newQuestion.Choices__c}"
+                                                     required="{!v.hide}"
+                                                     disabled="{!v.hide}"/> 
+        
+                                    <button class="slds-button slds-button--brand" onclick="{!c.handleCloseModal}">Cancel</button>
+                     			   <button class="slds-button slds-button--brand" onclick="{!c.clickUpdate}">update</button>
+                                   
+                                </form>
+                            </p>
+                       
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+        </aura:if>
+
+    <lightning:card >
+        
+        <p class="slds-p-horizontal_small">
+              <c:listQuestion questions="{!v.questions}"/>
+        </p>
+    </lightning:card>
+</aura:component>
